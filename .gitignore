@@ -1,0 +1,22 @@
+# Compilados Maven
+target/
+*.class
+
+# Archivo generado por la app (Java I/O)
+resultados_ventas.csv
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Credenciales / variables locales (NO subir)
+*.env
+application-local.properties
