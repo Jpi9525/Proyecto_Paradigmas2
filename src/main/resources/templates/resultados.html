@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados</title>
+</head>
+<body>
+    <h1>Resultados de ventas</h1>
+
+    <!-- TODO: Mostrar el empleado y el periodo consultado
+         usando los atributos que envie el Controller. -->
+
+    <!-- TODO: Mostrar los DOS resultados de los hilos:
+         total de registros, fecha mas reciente y fecha mas antigua
+         (vienen en el objeto 'estadisticas'). -->
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Puesto (JobTitle)</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- TODO: Recorrer la lista 'ventas' con th:each y pintar
+                 una fila por cada VentaEmpleado (nombre, apellido,
+                 jobTitle, fecha). -->
+        </tbody>
+    </table>
+
+    <p><a href="/">Nueva consulta</a></p>
+</body>
+</html>

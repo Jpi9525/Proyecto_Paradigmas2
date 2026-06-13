@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ventas de un empleado</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
+        label { display: block; margin-top: 12px; }
+        input { padding: 6px; width: 100%; box-sizing: border-box; }
+        button { margin-top: 16px; padding: 10px 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Ventas de un empleado en un periodo</h1>
+
+    <form action="/buscar" method="get">
+        <label for="empleadoId">Identificador del empleado (SalesPersonID):</label>
+        <input type="number" id="empleadoId" name="empleadoId" required>
+
+        <label for="fechaInicial">Fecha inicial:</label>
+        <input type="date" id="fechaInicial" name="fechaInicial" required>
+
+        <label for="fechaFinal">Fecha final:</label>
+        <input type="date" id="fechaFinal" name="fechaFinal" required>
+
+        <button type="submit">Consultar</button>
+    </form>
+
+    <p style="margin-top:20px; color:#666;">
+        Sugerencia: en AdventureWorks los SalesPersonID validos van aproximadamente
+        del 274 al 290.
+    </p>
+</body>
+</html>
