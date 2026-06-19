@@ -12,6 +12,7 @@ import java.util.List;
  *
  * Aqui va la consulta a AdventureWorks.
  * Pueden usar 'jdbcTemplate' que ya viene inyectado.
+ * Vlady ya esta trabajando aquí :)
  */
 @Repository
 public class VentaRepository {
