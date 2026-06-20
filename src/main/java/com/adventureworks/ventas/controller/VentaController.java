@@ -9,6 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import java.io.File;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +25,10 @@ public class VentaController {
 
     private final VentaService ventaService;
     private final EstadisticasService estadisticasService;
+
+    //Inyectamos la ruta de VentaService.
+    @Value("${app.export.path:resultados_ventas.csv}")
+    private String exportPath;
 
     public VentaController(VentaService ventaService, EstadisticasService estadisticasService) {
         this.ventaService = ventaService;
@@ -50,5 +61,24 @@ public class VentaController {
         model.addAttribute("fechaFinal", fechaFinal);
 
         return "resultados";
+    }
+
+    //Exponer y permitir descargar el archivo (.csv) con los resultados de la consulta.
+    @GetMapping("/descargar")
+    public ResponseEntity<Resource> descargarArchivo() {
+        File archivo = new File(exportPath);
+
+        //Validación de seguridad por si el usuario intenta descargar antes de buscar.
+        if (!archivo.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource resource = new FileSystemResource(archivo);
+
+        //Inyección de cabeceras HTTP para forzar la descarga.
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"resultados_ventas.csv\"")
+                .contentType(MediaType.parseMediaType("text/csv"))
+                .body(resource);
     }
 }

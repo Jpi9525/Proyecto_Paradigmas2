@@ -47,6 +47,41 @@
         }
         a.back { display: inline-block; margin-top: 1.5rem; color: #2563eb; text-decoration: none; font-weight: 600; }
         a.back:hover { text-decoration: underline; }
+
+        /* Estilos para el botón de descarga */
+        a.btn-descarga {
+            display: inline-block;
+            background-color: #0b2046; /* Azul profundo */
+            color: #ffffff;
+            padding: 0.6rem 1.2rem;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(11, 32, 70, 0.2);
+            transition: background-color 0.2s ease;
+        }
+        a.btn-descarga:hover {
+            background-color: #061228;
+        }
+
+        /* Ajuste menor al botón de regreso para que se alineen bien */
+        a.back {
+            display: inline-block;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        a.back:hover {
+            text-decoration: underline;
+        }
+
+        /* Contenedor de acciones finales */
+        .acciones {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -96,7 +131,12 @@
         No se encontraron ventas para ese empleado en el periodo indicado.
     </div>
 
-    <a class="back" th:href="@{/}">← Nueva consulta</a>
+    <div class="acciones">
+        <a class="btn-descarga" th:href="@{/}">Nueva consulta</a>
+        <a class="btn-descarga" th:if="${ventas != null and !ventas.isEmpty()}" th:href="@{/descargar}">
+            ⬇ Descargar reporte CSV
+        </a>
+    </div>
 </div>
 </body>
 </html>
