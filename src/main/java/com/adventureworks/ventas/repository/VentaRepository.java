@@ -4,15 +4,15 @@ import com.adventureworks.ventas.model.VentaEmpleado;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
 /**
  * CAPA REPOSITORY (acceso a datos).
  *
- * Aqui va la consulta a AdventureWorks.
- * Pueden usar 'jdbcTemplate' que ya viene inyectado.
- * Vlady ya esta trabajando aquí :)
+ * Aquí va la consulta a AdventureWorks.
+ * Se utiliza 'jdbcTemplate' :)
  */
 @Repository
 public class VentaRepository {
@@ -24,17 +24,24 @@ public class VentaRepository {
     }
 
     public List<VentaEmpleado> buscarVentas(int empleadoId, LocalDate fechaInicial, LocalDate fechaFinal) {
-        // TODO: Escribir la consulta SQL a AdventureWorks.
-        //   - Campos a traer: FirstName, LastName, JobTitle y la fecha.
-        //   - Filtrar por empleado y por el rango de fechas.
-        //   - Ordenar por fecha en orden DESCENDENTE.
-        //   Tablas utiles (enfoque OrderDate / ventas reales):
-        //     Sales.SalesOrderHeader, HumanResources.Employee, Person.Person
-        //   (Enfoque alternativo QuotaDate: Sales.SalesPersonQuotaHistory)
-        //
-        // TODO: Ejecutar con jdbcTemplate.query(...) y mapear cada fila
-        //       a un objeto VentaEmpleado.
+        //Consulta SQL aplicando ordenamiento descendente by OrderDate.
+        String sql = """
+            SELECT p.FirstName, p.LastName, e.JobTitle, soh.OrderDate
+            FROM Sales.SalesOrderHeader soh
+            INNER JOIN HumanResources.Employee e ON soh.SalesPersonID = e.BusinessEntityID
+            INNER JOIN Person.Person p ON e.BusinessEntityID = p.BusinessEntityID
+            WHERE soh.SalesPersonID = ?
+              AND soh.OrderDate >= ? 
+              AND soh.OrderDate <= ?
+            ORDER BY soh.OrderDate DESC
+            """;
 
-        return List.of(); // <- placeholder para que compile; reemplazar.
+        //Usamos una función Lambda para el RowMapper aprovechando constructor de VentaEmpleado.
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new VentaEmpleado(
+                rs.getString("FirstName"),
+                rs.getString("LastName"),
+                rs.getString("JobTitle"),
+                rs.getDate("OrderDate").toLocalDate() //Convierte el Date de SQL a LocalDate de Java.
+        ), empleadoId, Date.valueOf(fechaInicial), Date.valueOf(fechaFinal));
     }
 }
