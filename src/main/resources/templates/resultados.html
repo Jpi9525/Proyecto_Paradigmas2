@@ -2,34 +2,101 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Resultados</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de ventas</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            padding: 2rem 1.5rem;
+            color: #111827;
+        }
+        .wrap { max-width: 880px; margin: 0 auto; }
+        h1 { font-size: 1.4rem; margin: 0 0 1.25rem; }
+
+        /* Tarjetas con los datos calculados por los HILOS */
+        .stats { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.75rem; }
+        .stat {
+            flex: 1 1 180px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+        }
+        .stat .lbl { font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; }
+        .stat .val { font-size: 1.5rem; font-weight: 700; margin-top: .25rem; color: #2563eb; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+        }
+        thead { background: #111827; color: #fff; }
+        th, td { text-align: left; padding: .75rem 1rem; font-size: .9rem; }
+        tbody tr:nth-child(even) { background: #f9fafb; }
+        tbody tr:hover { background: #eff6ff; }
+
+        .empty {
+            background: #fff; padding: 2rem; border-radius: 12px;
+            text-align: center; color: #6b7280;
+        }
+        a.back { display: inline-block; margin-top: 1.5rem; color: #2563eb; text-decoration: none; font-weight: 600; }
+        a.back:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-    <h1>Resultados de ventas</h1>
+<div class="wrap">
 
-    <!-- TODO: Mostrar el empleado y el periodo consultado
-         usando los atributos que envie el Controller. -->
+    <h1>Resultados de la consulta</h1>
 
-    <!-- TODO: Mostrar los DOS resultados de los hilos:
-         total de registros, fecha mas reciente y fecha mas antigua
-         (vienen en el objeto 'estadisticas'). -->
+    <!-- ============ DATOS CALCULADOS CON LOS HILOS ============ -->
+    <div class="stats" th:if="${estadisticas != null}">
+        <div class="stat">
+            <div class="lbl">Total de registros</div>
+            <div class="val" th:text="${estadisticas.totalRegistros}">0</div>
+        </div>
+        <div class="stat">
+            <div class="lbl">Fecha más reciente</div>
+            <div class="val" th:text="${estadisticas.fechaMasReciente != null} ? ${estadisticas.fechaMasReciente} : '—'">—</div>
+        </div>
+        <div class="stat">
+            <div class="lbl">Fecha más antigua</div>
+            <div class="val" th:text="${estadisticas.fechaMasAntigua != null} ? ${estadisticas.fechaMasAntigua} : '—'">—</div>
+        </div>
+    </div>
 
-    <table border="1">
+    <!-- ============ TABLA DE VENTAS ============ -->
+    <!-- La colección ya viene ordenada por fecha DESC desde VentaService -->
+    <table th:if="${ventas != null and !ventas.isEmpty()}">
         <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Puesto (JobTitle)</th>
-                <th>Fecha</th>
+                <th>Puesto</th>
+                <th>Fecha de venta</th>
             </tr>
         </thead>
         <tbody>
-            <!-- TODO: Recorrer la lista 'ventas' con th:each y pintar
-                 una fila por cada VentaEmpleado (nombre, apellido,
-                 jobTitle, fecha). -->
+            <tr th:each="v : ${ventas}">
+                <td th:text="${v.nombre}">—</td>
+                <td th:text="${v.apellido}">—</td>
+                <td th:text="${v.jobTitle}">—</td>
+                <td th:text="${v.fecha}">—</td>
+            </tr>
         </tbody>
     </table>
 
-    <p><a href="/">Nueva consulta</a></p>
+    <!-- Mensaje cuando no hubo resultados -->
+    <div class="empty" th:if="${ventas == null or ventas.isEmpty()}">
+        No se encontraron ventas para ese empleado en el periodo indicado.
+    </div>
+
+    <a class="back" th:href="@{/}">← Nueva consulta</a>
+</div>
 </body>
 </html>
