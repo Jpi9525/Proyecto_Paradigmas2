@@ -2,33 +2,78 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ventas de un empleado</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; }
-        label { display: block; margin-top: 12px; }
-        input { padding: 6px; width: 100%; box-sizing: border-box; }
-        button { margin-top: 16px; padding: 10px 16px; cursor: pointer; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background: #f3f4f6;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .card {
+            background: #fff;
+            width: 100%;
+            max-width: 430px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            padding: 2rem;
+        }
+        h1 { font-size: 1.35rem; margin: 0 0 .35rem; color: #111827; }
+        p.sub { margin: 0 0 1.6rem; color: #6b7280; font-size: .9rem; }
+        label { display: block; font-size: .82rem; font-weight: 600; color: #374151; margin-bottom: .35rem; }
+        input {
+            width: 100%;
+            padding: .6rem .7rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: .95rem;
+            margin-bottom: 1rem;
+        }
+        input:focus { outline: 2px solid #2563eb; border-color: transparent; }
+        button {
+            width: 100%;
+            padding: .7rem;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #fff;
+            font-size: .95rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover { background: #1d4ed8; }
+        .hint { margin-top: 1.1rem; font-size: .78rem; color: #9ca3af; text-align: center; }
     </style>
 </head>
 <body>
-    <h1>Ventas de un empleado en un periodo</h1>
+    <div class="card">
+        <h1>Ventas de un empleado</h1>
+        <p class="sub">Consulta las ventas dentro de un periodo de fechas.</p>
 
-    <form action="/buscar" method="get">
-        <label for="empleadoId">Identificador del empleado (SalesPersonID):</label>
-        <input type="number" id="empleadoId" name="empleadoId" required>
+        <!-- Coincide con el VentaController: @GetMapping("/buscar") -> method="get", action="/buscar".
+             Los name="..." coinciden con los @RequestParam (empleadoId, fechaInicial, fechaFinal). -->
+        <form th:action="@{/buscar}" method="get">
 
-        <label for="fechaInicial">Fecha inicial:</label>
-        <input type="date" id="fechaInicial" name="fechaInicial" required>
+            <label for="empleadoId">ID del empleado</label>
+            <input type="number" id="empleadoId" name="empleadoId"
+                   placeholder="Ej. 275" min="274" max="290" required>
 
-        <label for="fechaFinal">Fecha final:</label>
-        <input type="date" id="fechaFinal" name="fechaFinal" required>
+            <label for="fechaInicial">Fecha inicial</label>
+            <input type="date" id="fechaInicial" name="fechaInicial" required>
 
-        <button type="submit">Consultar</button>
-    </form>
+            <label for="fechaFinal">Fecha final</label>
+            <input type="date" id="fechaFinal" name="fechaFinal" required>
 
-    <p style="margin-top:20px; color:#666;">
-        Sugerencia: en AdventureWorks los SalesPersonID validos van aproximadamente
-        del 274 al 290.
-    </p>
+            <button type="submit">Consultar ventas</button>
+        </form>
+
+        <p class="hint">IDs de prueba: 274–290 · Rango con datos: 2011 a 2014</p>
+    </div>
 </body>
 </html>
